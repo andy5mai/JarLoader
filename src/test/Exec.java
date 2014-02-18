@@ -13,21 +13,46 @@ public class Exec {
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		URLClassLoader urlClassLoader = getMenuClassLoader();
-		invokeMenu(loadMenu(urlClassLoader));
-		urlClassLoader.close();
+		String strJarPath = "lib/Menu.jar";
+		String strExecPath = "menu.test.Exec";
+		String strExecTitlePath = "menu.test.Exec$Title";
+		String strFieldPath = "common.Field";
+		String strLinePath = "common.Line";
+		String strMenuManagerPath = "common.MenuManager";
+		String strPrintManagerPath = "common.PrintManager";
+		
+		menu.test.Exec.main(args);
+		
+		JarLoader jarLoader = new JarLoader(JarLoader.class.getClassLoader());
+		jarLoader.loadJar(strJarPath);
+		Class classExec = jarLoader.load(strExecPath);
+//		jarLoader.load(strFieldPath);
+//		jarLoader.load(strLinePath);
+//		jarLoader.load(strMenuManagerPath);
+//		jarLoader.load(strPrintManagerPath);
+		jarLoader.load(strExecTitlePath);
+		
+		invokeMenu(classExec);
+		
+		
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("press any key when you ready...");
 		scanner.next();
 		
-		invokeMenu(loadMenu(urlClassLoader));
+		jarLoader = new JarLoader(JarLoader.class.getClassLoader());
+		jarLoader.loadJar(strJarPath);
+		classExec = jarLoader.load(strExecPath);
+		jarLoader.load(strExecTitlePath);
+		invokeMenu(classExec);
 	}
 	
+	/*
 	private static URLClassLoader getMenuClassLoader() throws Exception
 	{
 		JarLoader jarLoader = new JarLoader();
 		return jarLoader.getClassLoader("./lib/Menu.jar");
 	}
+	*/
 	
 	private static Class loadMenu(URLClassLoader urlClassLoader) throws Exception
 	{
